@@ -1,17 +1,12 @@
 package outercore.parameter;
 
 import java.io.PrintStream;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import beast.core.Description;
 import beast.core.Input;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 
 /**
- * @author Alexei Drummond
+ * @author Alexei Drummond (ported by Fabio K. Mendes)
  */
 
 @Description("A real-valued parameter represents a value (or array of values if the dimension is larger than one) " +
