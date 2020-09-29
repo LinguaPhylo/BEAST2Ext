@@ -1,0 +1,114 @@
+<project default="build" basedir="." name="beast-outercore">
+
+    <!-- CONFIGURATION: Source, JUnit test code and jar library locations. -->
+    <!--  <property name="test" location="test"/>-->
+    <property name="beast2" location="../beast2/"/>
+
+    <!-- Java 11 -->
+    <property name="sourceVersion" value="11"/>
+    <property name="targetVersion" value="11"/>
+    <property name="beastSrcRevision" value="master"/>
+    <!--*******************************************************************-->
+
+    <!-- Names of temporary build/test directories -->
+    <property name="build" location="build"/>
+    <property name="build-test" location="build-test"/>
+    <property name="test-reports" location="test-reports"/>
+    <property name="dist" location="dist"/>
+
+    <property name="outercoreName" value="outercore"/>
+    <property name="projName" value="outercore"/>
+    <property name="projVersion" value="0.0.1"/>
+
+<!--    <import file="${beast2}/build.xml"/>-->
+
+    <path id="classpath">
+        <pathelement path="${classpath}"/>
+        <fileset dir="lib" includes="*.jar"/>
+    </path>
+
+
+    <!-- Prepare for compilation -->
+    <target name="init">
+        <echo message="Java version: ${java.version}"/>
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <mkdir dir="${build}"/>
+        <mkdir dir="${dist}"/>
+    </target>
+
+    <!-- Compile -->
+    <target name="compile" depends="init">
+        <javac target="${targetVersion}" source="${sourceVersion}" srcdir="src"
+               destdir="${build}" classpathref="classpath" includeantruntime="false">
+        </javac>
+        <echo message="Successfully compiled ${outercoreName}."/>
+    </target>
+
+    <!-- Release -->
+    <property name="pack" value="${dist}/package"/>
+
+    <target name="dist" depends="compile">
+        <mkdir dir="${pack}"/>
+        <jar jarfile="${pack}/${outercoreName}.src.jar">
+            <fileset dir="src"/>
+        </jar>
+
+        <jar jarfile="${pack}/${projName}.v${projVersion}.jar">
+            <fileset dir="${build}"/>
+            <!-- TODO main in dev -->
+            <manifest>
+                <attribute name="Main-Class" value="beast.app.BeastMCMC"/>
+            </manifest>
+            <zipgroupfileset dir="lib" includes="*.jar"/>
+        </jar>
+
+        <echo>** ${outercoreName}.jar created successfuly! **</echo>
+    </target>
+
+
+    <target name="build" depends="clean, compile"/>
+
+    <!-- Prepare for unit test compilation -->
+<!--    <target name="init-test">-->
+<!--        <mkdir dir="${build-test}"/>-->
+<!--        <mkdir dir="${test-reports}"/>-->
+<!--    </target>-->
+
+
+<!--    &lt;!&ndash; Compile unit tests &ndash;&gt;-->
+<!--    <target name="compile-test" depends="init-test,compile">-->
+<!--        <javac target="${targetVersion}" source="${sourceVersion}" srcdir="test"-->
+<!--               destdir="${build-test}" classpathref="classpath" includeantruntime="false">-->
+<!--        </javac>-->
+<!--        <echo message="Successfully compiled ${outercoreName} tests."/>-->
+<!--    </target>-->
+
+
+<!--    &lt;!&ndash; Run unit tests &ndash;&gt;-->
+<!--    <target name="test" depends="compile-test">-->
+<!--        <junit printsummary="yes" failureproperty="testFailed">-->
+<!--            <classpath refid="classpath"/>-->
+<!--            <batchtest fork="yes" todir="${test-reports}">-->
+<!--                <fileset dir="test">-->
+<!--                    <include name="**/*Test.java"/>-->
+<!--                </fileset>-->
+<!--                <formatter type="plain"/>-->
+<!--            </batchtest>-->
+<!--        </junit>-->
+
+<!--        <fail if="testFailed" status="1" message="Unit test of ${outercoreName} failed."/>-->
+<!--    </target>-->
+
+<!--    &lt;!&ndash; Revert to pristine state. &ndash;&gt;-->
+<!--    <target name="clean">-->
+<!--        <delete dir="${build}"/>-->
+<!--        <delete dir="${dist}"/>-->
+<!--        <delete dir="${build-test}"/>-->
+<!--        <delete dir="${test-reports}"/>-->
+<!--    </target>-->
+
+<!--    <target name="travis" depends="clean, compile, test">-->
+<!--        <fail if="testFailed" message="One or more ${outercoreName} tests failed."/>-->
+<!--    </target>-->
+
+</project>
