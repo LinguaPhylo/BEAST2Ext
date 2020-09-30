@@ -15,24 +15,19 @@ public class KeyEnhancedRealParameter extends RealParameter {
 
     @Override
     public void initAndValidate() {
-        Double[] valuesString = valuesInput.get().toArray((Double[]) Array.newInstance(getMax().getClass(), 0));
-
-        int dimension = Math.max(dimensionInput.get(), valuesString.length);
-        dimensionInput.setValue(dimension, this);
+        super.initAndValidate();
 
         if (keysInput.get() != null) {
             String[] keys = keysInput.get().split(" ");
 
             // if input should be treated as matrix (2-D array)
-            if (minorDimensionInput.get() != null) {
-                if (minorDimensionInput.get().intValue() > 1 & keys.length != getRowCount()) {
-                    throw new IllegalArgumentException("Keys must be the same length as minorDimension. minorDimension is " + getMinorDimension1() + ". keys.length = " + keys.length);
-                }
+            if (getMinorDimension1() > 1 & keys.length != getRowCount()) {
+                throw new IllegalArgumentException("Keys must be the same length as minorDimension. minorDimension is " + getMinorDimension2() + ". keys.length = " + keys.length);
             }
 
             // if input should be treated as 1-D array
-            else if (keys.length != dimension) {
-                throw new IllegalArgumentException("Keys must be the same length as dimension. Dimension is " + dimension + ". keys.length = " + keys.length);
+            else if (getMinorDimension1() == 1 && keys.length != getDimension()) {
+                throw new IllegalArgumentException("Keys must be the same length as dimension. Dimension is " + getDimension() + ". keys.length = " + keys.length);
 
             }
 
@@ -90,12 +85,35 @@ public class KeyEnhancedRealParameter extends RealParameter {
      * @return the array of keys (a unique string for each dimension) that parallels the parameter index.
      */
     public String[] getKeys() {
-        String[] keys = new String[getDimension()];
+        /* FKM: @Alexei, why were you calling "new" inside
+        a getter -- see the code I commented out (which is
+        what you originally wrote, just fixed slightly for
+        matricial parameters)?
+
+        Isn't that going to be repeated a gazillion times
+        during MCMC?
+
+        Any reason not to just return the 'keys' living
+        as states? (what I am now doing)
+        */
+
+        /*
+        int nKeys = 0;
+        if (getMinorDimension1() == 1) {
+            nKeys = getDimension();
+        }
+
+        else if (getMinorDimension1() > 1) {
+            nKeys = getMinorDimension1();
+        }
+
+        String[] keys = new String[nKeys];
 
         for (int i = 0; i < keys.length; i++) {
             keys[i] = getKey(i);
         }
-        return keys;
+        */
+        return this.keys;
     }
 
     /**
