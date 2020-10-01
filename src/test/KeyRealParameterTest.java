@@ -1,6 +1,6 @@
 package test;
 
-import outercore.parameter.KeyEnhancedRealParameter;
+import outercore.parameter.KeyRealParameter;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +15,7 @@ import org.junit.Test;
 /*
  * This class contains unit tests for KeyEnhancedRealParameter
  */
-public class KeyEnhancedRealParameterTest {
+public class KeyRealParameterTest {
 
     /*
      * This test checks whether we get all
@@ -40,7 +40,7 @@ public class KeyEnhancedRealParameterTest {
                 -0.743303344769609, 1.10602125889508
         );
 
-        KeyEnhancedRealParameter twoTraits = new KeyEnhancedRealParameter();
+        KeyRealParameter twoTraits = new KeyRealParameter();
 
         twoTraits.initByName("value", twoTraitsValues, "keys", spNames, "minordimension", 2);
 

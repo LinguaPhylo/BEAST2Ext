@@ -6,7 +6,7 @@ import beast.core.parameter.RealParameter;
 import java.lang.reflect.Array;
 import java.util.TreeMap;
 
-public class KeyEnhancedRealParameter extends RealParameter {
+public class KeyRealParameter extends RealParameter {
 
     public final Input<String> keysInput = new Input<>("keys", "the keys (unique dimension names) for the dimensions of this parameter", (String) null);
 
