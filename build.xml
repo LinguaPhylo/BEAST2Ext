@@ -13,6 +13,7 @@
     <!-- Names of temporary build/test directories -->
     <property name="build" location="build"/>
     <property name="build-test" location="build-test"/>
+    <property name="test" location="src/test"/>
     <property name="test-reports" location="test-reports"/>
     <property name="dist" location="dist"/>
 
@@ -69,35 +70,35 @@
     <target name="build" depends="clean, compile"/>
 
     <!-- Prepare for unit test compilation -->
-<!--    <target name="init-test">-->
-<!--        <mkdir dir="${build-test}"/>-->
-<!--        <mkdir dir="${test-reports}"/>-->
-<!--    </target>-->
+    <target name="init-test">
+        <mkdir dir="${build-test}"/>
+        <mkdir dir="${test-reports}"/>
+    </target>
 
 
-<!--    &lt;!&ndash; Compile unit tests &ndash;&gt;-->
-<!--    <target name="compile-test" depends="init-test,compile">-->
-<!--        <javac target="${targetVersion}" source="${sourceVersion}" srcdir="test"-->
-<!--               destdir="${build-test}" classpathref="classpath" includeantruntime="false">-->
-<!--        </javac>-->
-<!--        <echo message="Successfully compiled ${outercoreName} tests."/>-->
-<!--    </target>-->
+    <!-- Compile unit tests -->
+    <target name="compile-test" depends="init-test,compile">
+        <javac target="${targetVersion}" source="${sourceVersion}" srcdir="${test}"
+               destdir="${build-test}" classpathref="classpath" includeantruntime="false">
+        </javac>
+        <echo message="Successfully compiled ${outercoreName} tests."/>
+    </target>
 
 
-<!--    &lt;!&ndash; Run unit tests &ndash;&gt;-->
-<!--    <target name="test" depends="compile-test">-->
-<!--        <junit printsummary="yes" failureproperty="testFailed">-->
-<!--            <classpath refid="classpath"/>-->
-<!--            <batchtest fork="yes" todir="${test-reports}">-->
-<!--                <fileset dir="test">-->
-<!--                    <include name="**/*Test.java"/>-->
-<!--                </fileset>-->
-<!--                <formatter type="plain"/>-->
-<!--            </batchtest>-->
-<!--        </junit>-->
+    <!-- Run unit tests -->
+    <target name="test" depends="compile-test">
+        <junit printsummary="yes" failureproperty="testFailed">
+            <classpath refid="classpath"/>
+            <batchtest fork="yes" todir="${test-reports}">
+                <fileset dir="${test}">
+                    <include name="**/*Test.java"/>
+                </fileset>
+                <formatter type="plain"/>
+            </batchtest>
+        </junit>
 
-<!--        <fail if="testFailed" status="1" message="Unit test of ${outercoreName} failed."/>-->
-<!--    </target>-->
+        <fail if="testFailed" status="1" message="Unit test of ${outercoreName} failed."/>
+    </target>
 
     <!-- Revert to pristine state. -->
     <target name="clean">
@@ -107,8 +108,8 @@
         <delete dir="${test-reports}"/>
     </target>
 
-<!--    <target name="travis" depends="clean, compile, test">-->
-<!--        <fail if="testFailed" message="One or more ${outercoreName} tests failed."/>-->
-<!--    </target>-->
+    <target name="travis" depends="clean, compile, test">
+        <fail if="testFailed" message="One or more ${outercoreName} tests failed."/>
+    </target>
 
 </project>
