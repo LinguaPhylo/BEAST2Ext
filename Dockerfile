@@ -38,8 +38,8 @@ RUN cd /root/beagle-lib && ./autogen.sh && ./configure --prefix=/usr/local && ma
 RUN ldconfig
 
 # Ant build fails if the repo dir isn't named graphicalModelSimulation
-RUN mkdir /root/graphicalModelSimulation
-WORKDIR /root/graphicalModelSimulation
+RUN mkdir /root/beast-outcore
+WORKDIR /root/beast-outcore
 
 ADD . ./
 
