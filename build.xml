@@ -2,18 +2,18 @@
 
     <!-- CONFIGURATION: Source, JUnit test code and jar library locations. -->
     <!--  <property name="test" location="test"/>-->
-    <property name="beast2" location="../beast2/"/>
+<!--    <property name="beast2" location="../beast2/"/>-->
 
     <!-- Java 11 -->
     <property name="sourceVersion" value="11"/>
     <property name="targetVersion" value="11"/>
-    <property name="beastSrcRevision" value="master"/>
+<!--    <property name="beastSrcRevision" value="master"/>-->
     <!--*******************************************************************-->
 
     <!-- Names of temporary build/test directories -->
     <property name="build" location="build"/>
     <property name="build-test" location="build-test"/>
-    <property name="test" location="src/test"/>
+<!--    <property name="test" location="test"/>-->
     <property name="test-reports" location="test-reports"/>
     <property name="dist" location="dist"/>
 
@@ -78,8 +78,13 @@
 
     <!-- Compile unit tests -->
     <target name="compile-test" depends="init-test,compile">
-        <javac target="${targetVersion}" source="${sourceVersion}" srcdir="${test}"
-               destdir="${build-test}" classpathref="classpath" includeantruntime="false">
+        <javac target="${targetVersion}" source="${sourceVersion}" srcdir="test" destdir="${build-test}"
+               includeantruntime="false">
+            <classpath>
+                <pathelement path="${classpath}"/>
+                <pathelement path="${build}"/>
+                <fileset dir="lib" includes="*.jar"/>
+            </classpath>
         </javac>
         <echo message="Successfully compiled ${outercoreName} tests."/>
     </target>
@@ -88,9 +93,14 @@
     <!-- Run unit tests -->
     <target name="test" depends="compile-test">
         <junit printsummary="yes" failureproperty="testFailed">
-            <classpath refid="classpath"/>
+            <classpath>
+                <pathelement path="${classpath}"/>
+                <pathelement path="${build}"/>
+                <pathelement path="${build-test}"/>
+                <fileset dir="lib" includes="*.jar"/>
+            </classpath>
             <batchtest fork="yes" todir="${test-reports}">
-                <fileset dir="${test}">
+                <fileset dir="test">
                     <include name="**/*Test.java"/>
                 </fileset>
                 <formatter type="plain"/>
