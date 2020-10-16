@@ -12,13 +12,7 @@ FROM openjdk:11
 # Install Apache Ant
 RUN apt-get update && apt-get install -y ant
 
-# Install and configure VNC server
-RUN apt-get update && apt-get install -y tightvncserver twm
-ENV DISPLAY :0
 ENV USER root
-RUN mkdir /root/.vnc
-RUN echo password | vncpasswd -f > /root/.vnc/passwd
-RUN chmod 600 /root/.vnc/passwd
 
 # Ant build fails if the repo dir isn't named beast-outcore
 RUN mkdir /root/beast-outcore
@@ -26,4 +20,4 @@ WORKDIR /root/beast-outcore
 
 ADD . ./
 
-CMD vncserver $DISPLAY -geometry 1920x1080; ant travis
+CMD ant travis
