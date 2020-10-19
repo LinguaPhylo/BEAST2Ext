@@ -20,7 +20,6 @@
     <property name="test-reports" location="../${repoName}/test-reports"/>
 
     <property name="projName" value="outercore"/>
-    <property name="projVersion" value="0.0.1"/>
 
     <!--*******************************************************************-->
 
@@ -47,27 +46,6 @@
         </javac>
         <echo message="Successfully compiled ${projName}."/>
     </target>
-
-    <!-- Release -->
-    <property name="pack" value="${dist}/package"/>
-
-    <target name="dist" depends="compile">
-        <mkdir dir="${pack}"/>
-        <jar jarfile="${pack}/${projName}.src.jar">
-            <fileset dir="${src}"/>
-        </jar>
-
-        <jar jarfile="${pack}/${projName}.v${projVersion}.jar">
-            <fileset dir="${build}"/>
-            <manifest>
-                <attribute name="Main-Class" value="beast.app.beastapp.BeastMain"/>
-            </manifest>
-            <zipgroupfileset dir="${lib}" includes="*.jar"/>
-        </jar>
-
-        <echo>** ${projName}.jar created successfuly! **</echo>
-    </target>
-
 
     <target name="build" depends="clean, compile"/>
 
@@ -119,5 +97,78 @@
     <target name="travis" depends="clean, compile, test">
         <fail if="testFailed" message="One or more ${projName} tests failed."/>
     </target>
+
+
+    <!-- Release -->
+    <property name="pack" value="${dist}/package"/>
+
+    <!-- Create BEAST 2 package -->
+    <target name="dist" depends="compile">
+        <xmlproperty file="version.xml" collapseAttributes="true"/>
+        <echo>name=${addon.name}</echo>
+        <echo>version=${addon.version}</echo>
+        <echo>depends=${addon.depends.on}</echo>
+        <echo>atleast=${addon.depends.atleast}</echo>
+
+        <property name="projVersion" value="${addon.version}"/>
+        <property name="fullName" value="${projName}.v${projVersion}"/>
+        <echo>fullName=${fullName}</echo>
+
+        <mkdir dir="${pack}"/>
+<!--        <mkdir dir="${pack}/examples"/>-->
+<!--        <mkdir dir="${pack}/templates"/>-->
+        <!--mkdir dir="${pack}/lib"/-->
+<!--        <mkdir dir="${pack}/doc"/>-->
+
+        <jar jarfile="${pack}/${fullName}.src.jar" basedir="${src}" />
+
+        <!--mkdir dir="${lib}" />
+        <copy todir="${pack}/lib">
+            <fileset dir="${lib}" includes="*.jar" />
+        </copy-->
+
+        <!--   use as BEAST 2 plugin     -->
+        <jar jarfile="${pack}/lib/${fullName}.jar" basedir="${build}" />
+<!--        <jar jarfile="${pack}/${projName}.v${projVersion}.jar" basedir="${build}">-->
+<!--            <manifest>-->
+<!--                <attribute name="Main-Class" value="beast.app.beastapp.BeastMain"/>-->
+<!--            </manifest>-->
+<!--            <zipgroupfileset dir="${lib}" includes="*.jar"/>-->
+<!--        </jar>-->
+
+        <copy file="README.md" tofile="${pack}/README" />
+        <!--copy file="COPYING" todir="${pack}" /-->
+        <!--copy todir="${pack}">
+            <fileset dir="${lib}" includes="LICENSE*" />
+        </copy-->
+
+<!--        <mkdir dir="${examples}" />-->
+<!--        <copy todir="${pack}/examples">-->
+<!--            <fileset dir="${examples}" includes="**/*.xml" />-->
+<!--            <fileset dir="${examples}" includes="**/*.nex" />-->
+<!--        </copy>-->
+
+<!--        <mkdir dir="${templates}" />-->
+<!--        <copy todir="${pack}/templates">-->
+<!--            <fileset dir="${templates}" includes="*.xml" />-->
+<!--        </copy>-->
+
+<!--        <mkdir dir="${doc}" />-->
+<!--        <copy todir="${pack}/doc">-->
+<!--            <fileset dir="${doc}" includes="*.tex,*.doc,*.lyx,*.txt"/>-->
+<!--        </copy>-->
+
+        <copy file="version.xml" todir="${pack}" />
+
+        <zip destfile="${dist}/${fullName}.zip" basedir="${pack}" />
+
+        <delete dir="${pack}"/>
+
+        <echo/>
+        <echo/>
+        <echo>** Package ${dist}/${fullName}.zip created successfuly! **</echo>
+
+    </target>
+
 
 </project>
