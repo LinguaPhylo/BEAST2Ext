@@ -1,4 +1,4 @@
-<project default="build" basedir="." name="beast-outercore">
+<project default="build" basedir="." name="outercore">
 
     <!-- Java 11 -->
     <property name="sourceVersion" value="11"/>

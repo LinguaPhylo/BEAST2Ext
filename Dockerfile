@@ -12,7 +12,11 @@ FROM openjdk:11
 # Install Apache Ant
 RUN apt-get update && apt-get install -y ant
 
-# Ant build fails if the repo dir isn't named beast-outcore
-WORKDIR ../beast-outcore
+ENV USER root
+
+RUN mkdir /root/beast-outercore
+WORKDIR /root/beast-outercore
+
+ADD . ./
 
 CMD ant travis
