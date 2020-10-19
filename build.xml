@@ -105,10 +105,8 @@
     <!-- Create BEAST 2 package -->
     <target name="dist" depends="compile">
         <xmlproperty file="version.xml" collapseAttributes="true"/>
-        <echo>name=${addon.name}</echo>
-        <echo>version=${addon.version}</echo>
-        <echo>depends=${addon.depends.on}</echo>
-        <echo>atleast=${addon.depends.atleast}</echo>
+        <echo>name=${addon.name}, version=${addon.version}</echo>
+        <echo>depends=${addon.depends.on}, atleast=${addon.depends.atleast}</echo>
 
         <property name="projVersion" value="${addon.version}"/>
         <property name="fullName" value="${projName}.v${projVersion}"/>
