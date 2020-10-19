@@ -59,9 +59,8 @@
 
         <jar jarfile="${pack}/${projName}.v${projVersion}.jar">
             <fileset dir="${build}"/>
-            <!-- TODO main in dev -->
             <manifest>
-                <attribute name="Main-Class" value="beast.app.BeastMCMC"/>
+                <attribute name="Main-Class" value="beast.app.beastapp.BeastMain"/>
             </manifest>
             <zipgroupfileset dir="${lib}" includes="*.jar"/>
         </jar>
