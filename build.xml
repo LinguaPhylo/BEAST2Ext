@@ -135,12 +135,9 @@
 <!--        </jar>-->
 
         <copy file="README.md" tofile="${pack}/README" />
-        <!--copy file="COPYING" todir="${pack}" /-->
-        <!--copy todir="${pack}">
-            <fileset dir="${lib}" includes="LICENSE*" />
-        </copy-->
+        <copy file="LICENSE" tofile="${pack}/LICENSE" />
 
-<!--        <mkdir dir="${examples}" />-->
+        <!--        <mkdir dir="${examples}" />-->
 <!--        <copy todir="${pack}/examples">-->
 <!--            <fileset dir="${examples}" includes="**/*.xml" />-->
 <!--            <fileset dir="${examples}" includes="**/*.nex" />-->
