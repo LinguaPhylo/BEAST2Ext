@@ -1,5 +1,6 @@
 package outercore.math.distributions;
 
+import beast.core.parameter.IntegerParameter;
 import beast.math.distributions.ParametricDistribution;
 import org.apache.commons.math.MathException;
 import org.apache.commons.math.distribution.ContinuousDistribution;
@@ -12,10 +13,10 @@ import beast.core.Input.Validate;
 import beast.core.parameter.RealParameter;
 import beast.util.Randomizer;
 
-@Description("Scaled Dirichlet distribution.")
-public class ScaledDirichlet extends ParametricDistribution {
+@Description("Weighted Dirichlet distribution.")
+public class WeightedDirichlet extends ParametricDistribution {
     final public Input<RealParameter> alphaInput = new Input<>("alpha", "coefficients of the scaled Dirichlet distribution", Validate.REQUIRED);
-    final public Input<RealParameter> weightsInput = new Input<>("weights", "weights of the scaled Dirichlet distribution", Validate.REQUIRED);
+    final public Input<IntegerParameter> weightsInput = new Input<>("weights", "weights of the scaled Dirichlet distribution", Validate.REQUIRED);
 
     @Override
     public void initAndValidate() {
@@ -69,29 +70,27 @@ public class ScaledDirichlet extends ParametricDistribution {
             throw new IllegalArgumentException("Dimensions of alpha and x should be the same, but dim(alpha)=" + alphaInput.get().getDimension()
                     + " and dim(x)=" + pX.getDimension());
         }
-        Double[] weights = weightsInput.get().getValues();
-        double[] z = new double[pX.getDimension()];
+        double[] zstar = pX.getDoubleValues();
+
+        double[] z = new double[zstar.length];
+
+        double sum = 0.0;
+        for (int i = 0; i < zstar.length; i++) {
+            z[i] = zstar[i];
+            sum += z[i];
+        }
+        for (int i = 0; i < zstar.length; i++) {
+            z[i] /= sum;
+        }
 
         double logP = 0;
         double sumAlpha = 0;
         for (int i = 0; i < pX.getDimension(); i++) {
-            z[i] = pX.getArrayValue(i);
             logP += (alpha[i] - 1) * Math.log(z[i]);
             logP -= org.apache.commons.math.special.Gamma.logGamma(alpha[i]);
             sumAlpha += alpha[i];
         }
         logP += org.apache.commons.math.special.Gamma.logGamma(sumAlpha);
-
-
-        double bzSum = 0.0;
-        for (int i = 0; i < pX.getDimension(); i++) {
-            bzSum += weights[i] * z[i];
-        }
-        logP -= sumAlpha * Math.log(bzSum);
-
-        for (int i = 0; i < pX.getDimension(); i++) {
-            logP += (alpha[i]) * Math.log(weights[i]) + (alpha[i] - 1.0) * Math.log(z[i]);
-        }
 
         return logP;
     }
@@ -104,8 +103,8 @@ public class ScaledDirichlet extends ParametricDistribution {
             Double[] dirichletSample = new Double[dim];
             double sum = 0.0;
             for (int j = 0; j < dim; j++) {
-                dirichletSample[j] = Randomizer.nextGamma(alphaInput.get().getValue(j), 1.0) / weightsInput.get().getValue(j);
-                sum += dirichletSample[j];
+                dirichletSample[j] = Randomizer.nextGamma(alphaInput.get().getValue(j), 1.0);
+                sum += dirichletSample[j] * weightsInput.get().getValue(j);
             }
             for (int j = 0; j < dim; j++) {
                 dirichletSample[j] = dirichletSample[j] / sum;
