@@ -1,0 +1,31 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>compevol</groupId>
+    <artifactId>beast-outercore</artifactId>
+    <version>0.0.1</version>
+
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>compevol</groupId>
+            <artifactId>beast2</artifactId>
+            <version>2.6.3</version>
+            <scope>system</scope>
+            <version>${project.basedir}/lib/beast2.6.3.jar</version>
+        </dependency>
+        <dependency>
+            <groupId>compevol</groupId>
+            <artifactId>BEASTlabs</artifactId>
+            <version>1.9.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/BEASTlabs.v1.9.5.jar</systemPath>
+        </dependency>
+
+    </dependencies>
+</project>
