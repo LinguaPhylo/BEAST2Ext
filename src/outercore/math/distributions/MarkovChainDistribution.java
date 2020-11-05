@@ -3,8 +3,10 @@ package outercore.math.distributions;
 
 import beast.core.*;
 import beast.core.Input.Validate;
+import org.apache.commons.math.MathException;
 import org.apache.commons.math.distribution.GammaDistribution;
 import org.apache.commons.math.distribution.GammaDistributionImpl;
+import org.apache.commons.math3.stat.descriptive.moment.StandardDeviation;
 
 import java.util.List;
 import java.util.Random;
@@ -132,6 +134,29 @@ public class MarkovChainDistribution extends Distribution {
 
     @Override
     public void sample(State state, Random random) {
+    }
+
+    public static void main(String[] args) throws MathException {
+
+        double[][] theta = new double[3][100000];
+        for (int i = 0; i < theta[0].length; i++) {
+            double mean = 0.5;
+
+            GammaDistributionImpl gamma = new GammaDistributionImpl(1.0, mean);
+            double initial = gamma.inverseCumulativeProbability(Math.random());
+            gamma = new GammaDistributionImpl(1.0, initial);
+            theta[0][i] = gamma.inverseCumulativeProbability(Math.random());
+            gamma = new GammaDistributionImpl(1.0, theta[0][i]);
+            theta[1][i] = gamma.inverseCumulativeProbability(Math.random());
+            gamma = new GammaDistributionImpl(1.0, theta[1][i]);
+            theta[2][i] = gamma.inverseCumulativeProbability(Math.random());
+        }
+
+        StandardDeviation sd = new StandardDeviation();
+
+        System.out.println("sd(theta0)="+sd.evaluate(theta[0]));
+        System.out.println("sd(theta1)="+sd.evaluate(theta[1]));
+        System.out.println("sd(theta2)="+sd.evaluate(theta[2]));
     }
 }
 
