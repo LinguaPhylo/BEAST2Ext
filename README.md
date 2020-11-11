@@ -9,4 +9,4 @@ It is also released as a BEAST 2 package.
 How to install and use BEAST 2 packages can be seen 
 [here](https://www.beast2.org/managing-packages/). 
 
-This project requires Java 11.
+This project requires Java 1.8.
