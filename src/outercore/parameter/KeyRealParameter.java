@@ -3,6 +3,7 @@ package outercore.parameter;
 import beast.core.Input;
 import beast.core.parameter.RealParameter;
 
+import java.io.PrintStream;
 import java.lang.reflect.Array;
 import java.util.TreeMap;
 
@@ -64,6 +65,18 @@ public class KeyRealParameter extends RealParameter {
 
     public int getRowCount() {
         return getMinorDimension2();
+    }
+
+    @Override
+    public void init(final PrintStream out) {
+        final int valueCount = getDimension();
+        if (valueCount == 1) {
+            out.print(getID() + "\t");
+        } else {
+            for (int value = 0; value < valueCount; value++) {
+                out.print(getID() + "." + getKey(value) + "\t");
+            }
+        }
     }
 
     /**
