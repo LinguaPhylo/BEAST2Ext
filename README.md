@@ -1,6 +1,6 @@
 # BEAST2 Outer Core
 
-[![Build Status](https://github.com/LinguaPhylo/beast-outercore/workflows/outercore%20tests/badge.svg)](https://github.com/LinguaPhylo/beast-outercore/actions?query=workflow%3A%outercore+tests%22)
+[![Build Status](https://github.com/LinguaPhylo/beast-outercore/workflows/outercore%20tests/badge.svg)](https://github.com/LinguaPhylo/beast-outercore/actions?query=workflow%3A%22outercore+tests%22)
 
 
 The `outercore` package of BEAST 2 has core features, not in the core :)
