@@ -5,6 +5,7 @@ import beast.core.Distribution;
 import beast.core.Input;
 import beast.core.State;
 import beast.core.parameter.BooleanParameter;
+import beast.core.parameter.IntegerParameter;
 import beast.core.parameter.RealParameter;
 
 import java.util.List;
@@ -19,11 +20,15 @@ public class BernoulliDistribution extends Distribution {
             "size 1 for iid trials, or the same dimension as trials parameter if inhomogeneous bernoulli process.", Input.Validate.REQUIRED);
     final public Input<BooleanParameter> trialsInput = new Input<>("parameter", "the results of a series of bernoulli trials.");
 
+    final public Input<IntegerParameter> minHammingWeightInput = new Input<>("minHammingWeight",
+            "Optional condition: the minimum number of ones in the boolean array.");
+
     public double calculateLogP() {
         logP = 0.0;
 
         BooleanParameter trials = trialsInput.get();
         RealParameter p = pInput.get();
+        IntegerParameter minHammingWeight = minHammingWeightInput.get();
 
         // for efficiency split the two options
         if (p.getDimension() == 1) {
@@ -36,6 +41,9 @@ public class BernoulliDistribution extends Distribution {
             }
 
         } else {
+            if (minHammingWeight != null && hammingWeight(trials) < minHammingWeight.getValue())
+                return Double.NEGATIVE_INFINITY;
+
             for (int i = 0; i < trials.getDimension(); i++) {
                 double prob = p.getArrayValue(i);
                 logP += Math.log(trials.getValue(i) ? prob : 1.0 - prob);
@@ -43,6 +51,13 @@ public class BernoulliDistribution extends Distribution {
 
         }
         return logP;
+    }
+
+    private int hammingWeight(BooleanParameter trials) {
+        int sum = 0;
+        for (int i = 0; i < trials.getDimension(); i++)
+            if (trials.getValue(i)) sum += 1;
+        return sum;
     }
 
     @Override
