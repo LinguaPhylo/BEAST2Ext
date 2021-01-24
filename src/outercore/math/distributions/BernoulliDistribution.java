@@ -20,7 +20,7 @@ public class BernoulliDistribution extends Distribution {
             "size 1 for iid trials, or the same dimension as trials parameter if inhomogeneous bernoulli process.", Input.Validate.REQUIRED);
     final public Input<BooleanParameter> trialsInput = new Input<>("parameter", "the results of a series of bernoulli trials.");
 
-    final public Input<IntegerParameter> minHammingWeightInput = new Input<>("minHammingWeight",
+    final public Input<IntegerParameter> minSuccessesInput = new Input<>("minSuccesses",
             "Optional condition: the minimum number of ones in the boolean array.");
 
     public double calculateLogP() {
@@ -28,7 +28,7 @@ public class BernoulliDistribution extends Distribution {
 
         BooleanParameter trials = trialsInput.get();
         RealParameter p = pInput.get();
-        IntegerParameter minHammingWeight = minHammingWeightInput.get();
+        IntegerParameter minSuccesses = minSuccessesInput.get();
 
         // for efficiency split the two options
         if (p.getDimension() == 1) {
@@ -41,7 +41,8 @@ public class BernoulliDistribution extends Distribution {
             }
 
         } else {
-            if (minHammingWeight != null && hammingWeight(trials) < minHammingWeight.getValue())
+            // reject if < minSuccesses
+            if (minSuccesses != null && hammingWeight(trials) < minSuccesses.getValue())
                 return Double.NEGATIVE_INFINITY;
 
             for (int i = 0; i < trials.getDimension(); i++) {
