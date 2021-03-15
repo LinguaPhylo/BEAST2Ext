@@ -39,7 +39,7 @@
     </target>
 
     <!-- Prepare for compilation -->
-    <target name="init">
+    <target name="init" depends="clean">
         <echo message="Local Java version: ${java.version}, but compile for Java ${targetVersion}."/>
         <echo message="${ant.project.name}: ${ant.file}"/>
         <echo message="Working dir is ${repoName}." />
@@ -49,7 +49,7 @@
     </target>
 
     <!-- Compile -->
-    <target name="compile" depends="clean, init">
+    <target name="compile" depends="init">
         <javac target="${targetVersion}" source="${sourceVersion}" srcdir="${src}"
                destdir="${build}" classpathref="outercore-clspath" includeantruntime="false">
         </javac>
@@ -67,7 +67,7 @@
     </target>
 
     <!-- Compile unit tests -->
-    <target name="compile-test" depends="init-test,compile">
+    <target name="compile-test" depends="init-test">
         <javac target="${targetVersion}" source="${sourceVersion}" srcdir="${test}" destdir="${build-test}"
                classpathref="outercore-clspath" includeantruntime="false">
         </javac>
@@ -76,7 +76,7 @@
 
 
     <!-- Run unit tests -->
-    <target name="test" depends="compile-test">
+    <target name="test" depends="compile, compile-test">
         <junit printsummary="yes" failureproperty="testFailed">
             <classpath>
                 <path refid="outercore-clspath"/>
@@ -93,7 +93,7 @@
         <fail if="testFailed" status="1" message="Unit test of ${projName} failed."/>
     </target>
 
-    <target name="github-actions" depends="compile, test">
+    <target name="github-actions" depends="compile, compile-test, test">
         <fail if="testFailed" message="One or more ${projName} tests failed."/>
     </target>
 
@@ -101,7 +101,7 @@
     <!-- Release -->
     <property name="pack" value="${dist}/package"/>
 
-    <!-- Create BEAST 2 package -->
+    <!-- Create BEAST 2 package, no dist task here -->
     <target name="release" depends="compile">
         <xmlproperty file="version.xml" collapseAttributes="true"/>
         <echo>name=${addon.name}, version=${addon.version}</echo>
