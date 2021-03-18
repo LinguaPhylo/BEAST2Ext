@@ -5,11 +5,11 @@ import beast.core.parameter.RealParameter;
 
 import java.io.PrintStream;
 import java.lang.reflect.Array;
-import java.util.TreeMap;
 
-public class KeyRealParameter extends RealParameter {
+public class KeyRealParameter extends RealParameter implements KeyParameter<Double> {
 
-    public final Input<String> keysInput = new Input<>("keys", "the keys (unique dimension names) for the dimensions of this parameter", (String) null);
+    public final Input<String> keysInput = new Input<>("keys",
+            "the keys (unique dimension names) for the dimensions of this parameter", (String) null);
 
     private String[] keys = null;
     private java.util.Map<String, Integer> keyToIndexMap = null;
@@ -18,65 +18,35 @@ public class KeyRealParameter extends RealParameter {
     public void initAndValidate() {
         super.initAndValidate();
 
+        // set keys before initAndValidateKeys
         if (keysInput.get() != null) {
-            String[] keys = keysInput.get().split(" ");
-
-            // if input should be treated as matrix (2-D array)
-            if (getMinorDimension1() > 1 & keys.length != getRowCount()) {
-                throw new IllegalArgumentException("Keys must be the same length as minorDimension. minorDimension is " + getMinorDimension2() + ". keys.length = " + keys.length);
-            }
-
-            // if input should be treated as 1-D array
-            else if (getMinorDimension1() == 1 && keys.length != getDimension()) {
-                throw new IllegalArgumentException("Keys must be the same length as dimension. Dimension is " + getDimension() + ". keys.length = " + keys.length);
-
-            }
-
-            initKeys(keys);
+            this.keys = keysInput.get().split(" ");
         }
 
-        super.initAndValidate();
+        initAndValidateKeys(keys, keyToIndexMap,this);
+
+        // super.initAndValidate(); //duplicate
     }
 
-    private void initKeys(String[] keys) {
-        this.keys = keys;
-
-        if (keys != null) {
-            keyToIndexMap = new TreeMap<>();
-
-            for (int i = 0; i < keys.length; i++) {
-                keyToIndexMap.put(keys[i], i);
-            }
-
-            if (keyToIndexMap.keySet().size() != keys.length) {
-                throw new IllegalArgumentException("All keys must be unique! Found " + keyToIndexMap.keySet().size() + " unique keys for " + getDimension() + " dimensions.");
-            }
-        }
-    }
-
+    @Override
     public Double getMax() { return Double.POSITIVE_INFINITY; }
 
-    public Double getMin() { return Double.NEGATIVE_INFINITY;
-    }
+    @Override
+    public Double getMin() { return Double.NEGATIVE_INFINITY; }
 
+    @Override
     public int getColumnCount() {
         return getMinorDimension1();
     }
 
+    @Override
     public int getRowCount() {
         return getMinorDimension2();
     }
 
     @Override
     public void init(final PrintStream out) {
-        final int valueCount = getDimension();
-        if (valueCount == 1) {
-            out.print(getID() + "\t");
-        } else {
-            for (int value = 0; value < valueCount; value++) {
-                out.print(getID() + "." + getKey(value) + "\t");
-            }
-        }
+        init(out, this);
     }
 
     /**
@@ -84,14 +54,7 @@ public class KeyRealParameter extends RealParameter {
      * @return the unique key for the i'th value.
      */
     public String getKey(int i) {
-        if (keys != null) return keys[i];
-
-        // return the unique key for the i'th value. Default implementation will return a string representing the zero-based index, (i.e. a string representation of the argument).
-        else if (getDimension() == 1) return "0";
-
-        else if (i < getDimension()) return "" + i;
-
-        throw new IllegalArgumentException("Invalid index " + i);
+        return getKey(i, this);
     }
 
     /**
