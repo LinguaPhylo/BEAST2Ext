@@ -61,13 +61,13 @@ public interface KeyParameter<T extends Number> {
     }
 
 
-    default void init(final PrintStream out, Parameter<T> parameter) {
+    default void initOut(final PrintStream out, Parameter<T> parameter, boolean idStart1) {
         final int valueCount = parameter.getDimension();
         if (valueCount == 1) {
             out.print(parameter.getID() + "\t");
         } else {
-            for (int value = 0; value < valueCount; value++) {
-                out.print(parameter.getID() + "." + getKey(value, parameter) + "\t");
+            for (int i = 0; i < valueCount; i++) {
+                out.print(parameter.getID() + "." + getKey(i, parameter, idStart1) + "\t");
             }
         }
     }
@@ -76,7 +76,7 @@ public interface KeyParameter<T extends Number> {
      * @param i index
      * @return the unique key for the i'th value.
      */
-    default String getKey(int i, Parameter<T> parameter) {
+    default String getKey(int i, Parameter<T> parameter, boolean idStart1) {
         String[] keys = getKeys();
         if (keys != null) return keys[i];
 
@@ -85,7 +85,11 @@ public interface KeyParameter<T extends Number> {
         // (i.e. a string representation of the argument).
         else if (parameter.getDimension() == 1) return "0";
 
-        else if (i < parameter.getDimension()) return "" + i;
+        // i start from 0
+        else if (i < parameter.getDimension()) {
+            if (idStart1) return "" + (i+1);
+            return "" + i;
+        }
 
         throw new IllegalArgumentException("Invalid index " + i);
     }

@@ -10,6 +10,10 @@ public class KeyRealParameter extends RealParameter implements KeyParameter<Doub
 
     public final Input<String> keysInput = new Input<>("keys",
             "the keys (unique dimension names) for the dimensions of this parameter", (String) null);
+    public final Input<Boolean> idStart1Input = new Input<>("idStart1",
+            "If true, the element's name will start from 1 instead of 0, " +
+                    "which is same as BEAST Parameter convention.", false);
+
 
     private String[] keys = null;
     private java.util.Map<String, Integer> keyToIndexMap = null;
@@ -46,7 +50,7 @@ public class KeyRealParameter extends RealParameter implements KeyParameter<Doub
 
     @Override
     public void init(final PrintStream out) {
-        init(out, this);
+        initOut(out, this, idStart1Input.get());
     }
 
     /**
@@ -54,7 +58,7 @@ public class KeyRealParameter extends RealParameter implements KeyParameter<Doub
      * @return the unique key for the i'th value.
      */
     public String getKey(int i) {
-        return getKey(i, this);
+        return getKey(i, this, idStart1Input.get());
     }
 
     /**

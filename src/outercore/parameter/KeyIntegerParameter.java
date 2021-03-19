@@ -9,6 +9,9 @@ public class KeyIntegerParameter extends IntegerParameter implements KeyParamete
 
     public final Input<String> keysInput = new Input<>("keys",
             "the keys (unique dimension names) for the dimensions of this parameter", (String) null);
+    public final Input<Boolean> idStart1Input = new Input<>("idStart1",
+            "If true, the element's name will start from 1 instead of 0, " +
+                    "which is same as BEAST Parameter convention.", false);
 
     private String[] keys = null;
     private java.util.Map<String, Integer> keyToIndexMap = null;
@@ -47,7 +50,7 @@ public class KeyIntegerParameter extends IntegerParameter implements KeyParamete
 
     @Override
     public void init(final PrintStream out) {
-        init(out, this);
+        initOut(out, this, idStart1Input.get());
     }
 
     /**
@@ -55,7 +58,7 @@ public class KeyIntegerParameter extends IntegerParameter implements KeyParamete
      * @return the unique key for the i'th value.
      */
     public String getKey(int i) {
-        return getKey(i, this);
+        return getKey(i, this, idStart1Input.get());
     }
     /**
      * @return the array of keys (a unique string for each dimension) that parallels the parameter index.
