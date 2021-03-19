@@ -22,7 +22,7 @@ public class KeyIntegerParameter extends IntegerParameter implements KeyParamete
             this.keys = keysInput.get().split(" ");
         }
 
-        initAndValidateKeys(keys, keyToIndexMap,this);
+        keyToIndexMap = initAndValidateKeys(keys, this);
     }
 
     @Override
@@ -64,5 +64,18 @@ public class KeyIntegerParameter extends IntegerParameter implements KeyParamete
         return this.keys;
     }
 
+
+    public Integer getValue(String key) {
+        if (keys != null) {
+            return getValue(keyToIndexMap.get(key));
+        }
+
+        try {
+            int index = Integer.parseInt(key);
+            return getValue(index);
+        } catch (NumberFormatException nfe) {
+            return null;
+        }
+    }
 
 }

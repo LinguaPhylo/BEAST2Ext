@@ -23,7 +23,7 @@ public class KeyRealParameter extends RealParameter implements KeyParameter<Doub
             this.keys = keysInput.get().split(" ");
         }
 
-        initAndValidateKeys(keys, keyToIndexMap,this);
+        keyToIndexMap = initAndValidateKeys(keys,this);
 
         // super.initAndValidate(); //duplicate
     }
