@@ -125,7 +125,7 @@
         </copy-->
 
         <!--   use as BEAST 2 plugin     -->
-        <jar jarfile="${pack}/lib/${fullName}.jar" basedir="${build}" includes="/**/*.class" />
+        <jar jarfile="${pack}/lib/${fullName}.jar" basedir="${build}" includes="**/*.class" />
 <!--        <jar jarfile="${pack}/${projName}.v${projVersion}.jar" basedir="${build}">-->
 <!--            <manifest>-->
 <!--                <attribute name="Main-Class" value="beast.app.beastapp.BeastMain"/>-->
