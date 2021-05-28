@@ -1,7 +1,7 @@
 package outercore.parameter;
 
 import org.junit.Assert;
-import org.junit.Ignore;
+import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,7 +19,7 @@ public class KeyRealParameterTest {
      * This test checks whether we get all
      * the trait values for two species
      */
-    @Ignore
+    @Test
     public void feedTwoTraitsKEParamTest () {
 
         String spNames = "sp1 sp2 sp3 sp4 sp5 sp6 sp7 sp8 sp9 sp10";
@@ -39,8 +39,8 @@ public class KeyRealParameterTest {
         );
 
         KeyRealParameter twoTraits = new KeyRealParameter();
-        // TODO BEAST bug to ignore minordimension for keys : keys.length != dimension
-        twoTraits.initByName("value", twoTraitsValues, "keys", spNames, "minordimension", 2);
+        // BEAST bug to ignore minordimension for keys : keys.length != dimension
+        twoTraits.initByName("value", twoTraitsValues, "dimNames", spNames, "minordimension", 2);
 
         Assert.assertArrayEquals(twoTraits.getRowValues("sp1"), new Double[] { 0.326278727608277, 1.8164550628074 });
         Assert.assertArrayEquals(twoTraits.getRowValues("sp8"), new Double[] { 4.22298205455098, 1.51483058860744 });
