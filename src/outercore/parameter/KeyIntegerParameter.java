@@ -1,18 +1,52 @@
-//package outercore.parameter;
-//
-//import beast.core.Input;
-//import beast.core.parameter.IntegerParameter;
-//
-//import java.io.PrintStream;
-//
-//public class KeyIntegerParameter extends IntegerParameter implements KeyParameter<Integer> {
-//
+package outercore.parameter;
+
+import beast.core.Input;
+import beast.core.parameter.IntegerParameter;
+
+import java.io.PrintStream;
+import java.util.Arrays;
+
+@Deprecated
+public class KeyIntegerParameter extends IntegerParameter implements KeyParameter<Integer> {
+
 //    public final Input<String> keysInput = new Input<>("keys",
 //            "the keys (unique dimension names) for the dimensions of this parameter", (String) null);
-//    public final Input<Boolean> idStart1Input = new Input<>("idStart1",
-//            "If true, the element's name will start from 1 instead of 0, " +
-//                    "which is same as BEAST Parameter convention.", false);
-//
+    public final Input<Boolean> idStart1Input = new Input<>("idStart1",
+            "If true, the element's name will start from 1 instead of 0, " +
+                    "which is same as BEAST Parameter convention.", false);
+
+
+    public static KeyIntegerParameter createKeyIntegerParameter(IntegerParameter param) {
+        KeyIntegerParameter newParam = new KeyIntegerParameter();
+        newParam.setInputValue("value", Arrays.asList(param.getValues()));
+        newParam.setInputValue("dimension", param.getDimension());
+        newParam.setInputValue("lower", param.getLower());
+        newParam.setInputValue("upper", param.getUpper());
+        newParam.setInputValue("estimate", newParam.isEstimated());
+
+        newParam.setInputValue("keys", String.join(" ", param.getKeys()));
+
+        newParam.setID(param.getID());
+        newParam.initAndValidate();
+        return newParam;
+    }
+
+    @Override
+    public void init(final PrintStream out) {
+        initOut(out, this, idStart1Input.get());
+    }
+
+    /**
+     * @param i index
+     * @return the unique key for the i'th value.
+     */
+    public String getKey(int i) {
+        return getKey(i, this, idStart1Input.get());
+    }
+
+
+
+
 //    private String[] keys = null;
 //    private java.util.Map<String, Integer> keyToIndexMap = null;
 //
@@ -47,19 +81,7 @@
 //    public int getRowCount() {
 //        return getMinorDimension2();
 //    }
-//
-//    @Override
-//    public void init(final PrintStream out) {
-//        initOut(out, this, idStart1Input.get());
-//    }
-//
-//    /**
-//     * @param i index
-//     * @return the unique key for the i'th value.
-//     */
-//    public String getKey(int i) {
-//        return getKey(i, this, idStart1Input.get());
-//    }
+
 //    /**
 //     * @return the array of keys (a unique string for each dimension) that parallels the parameter index.
 //     */
@@ -80,5 +102,5 @@
 //            return null;
 //        }
 //    }
-//
-//}
+
+}
