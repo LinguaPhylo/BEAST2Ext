@@ -3,7 +3,7 @@
 
     <groupId>compevol</groupId>
     <artifactId>beast-outercore</artifactId>
-    <version>0.0.8</version>
+    <version>0.0.9</version>
 
     <dependencies>
         <dependency>
@@ -15,9 +15,9 @@
         <dependency>
             <groupId>compevol</groupId>
             <artifactId>beast2</artifactId>
-            <version>2.6.3</version>
+            <version>2.6.5</version>
             <scope>system</scope>
-            <version>${project.basedir}/lib/beast2.6.3.jar</version>
+            <version>${project.basedir}/lib/beast2.6.5.jar</version>
         </dependency>
         <dependency>
             <groupId>compevol</groupId>

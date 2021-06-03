@@ -1,4 +1,4 @@
-<addon name='outercore' version='0.0.8'>
-    <depends on='beast2' atleast='2.6.3'/>
+<addon name='outercore' version='0.0.9'>
+    <depends on='beast2' atleast='2.6.5'/>
 </addon>
 
