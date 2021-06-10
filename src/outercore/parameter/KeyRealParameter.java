@@ -17,10 +17,9 @@ public class KeyRealParameter extends RealParameter implements KeyParameter<Doub
 
     @Override
     public void initAndValidate() {
-
+        // call super before initDimNames
         super.initAndValidate();
 
-        // set keys before initAndValidateKeys
         if (dimNamesInput.get() != null) {
             this.dimNames = dimNamesInput.get().split(" ");
         }

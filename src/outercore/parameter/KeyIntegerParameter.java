@@ -18,14 +18,14 @@ public class KeyIntegerParameter extends IntegerParameter implements KeyParamete
 
     @Override
     public void initAndValidate() {
-        // set keys before initAndValidateKeys
+        // call super before initDimNames
+        super.initAndValidate();
+
         if (dimNamesInput.get() != null) {
             this.dimNames = dimNamesInput.get().split(" ");
         }
 
         dimNameToIndexMap = initDimNames(dimNames,this);
-
-        super.initAndValidate();
     }
 
     /**
