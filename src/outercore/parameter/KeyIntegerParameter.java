@@ -3,16 +3,21 @@ package outercore.parameter;
 import beast.core.Input;
 import beast.core.parameter.IntegerParameter;
 
-import java.util.Arrays;
+import java.util.List;
 
+/**
+ * the extension of {@link IntegerParameter}, where "dimNames" is same as "keys"
+ * but works for column names of 2d matrix.
+ * It is proposing to be deprecated after BEAST 2.6.6.
+ */
 public class KeyIntegerParameter extends IntegerParameter implements KeyParameter<Integer> {
 
     public final Input<String> dimNamesInput = new Input<>("dimNames",
             "the unique dimension names for the dimensions of this parameter, " +
-                    "which can also be either same or the divisor of the values length. ",
+                    "which can also be column names when values are 2d matrix. ",
             null, Input.Validate.XOR, keysInput);
 
-    private String[] dimNames = null;
+    private List<String> dimNames = null; // List.of creates unmodifiable list
     private java.util.Map<String, Integer> dimNameToIndexMap = null;
 
 
@@ -22,7 +27,9 @@ public class KeyIntegerParameter extends IntegerParameter implements KeyParamete
         super.initAndValidate();
 
         if (dimNamesInput.get() != null) {
-            this.dimNames = dimNamesInput.get().split(" ");
+            String[] dimNamesArr = dimNamesInput.get().split(" ");
+            // Unmodifiable List
+            this.dimNames = List.of(dimNamesArr);
         }
 
         dimNameToIndexMap = initDimNames(dimNames,this);
@@ -33,15 +40,15 @@ public class KeyIntegerParameter extends IntegerParameter implements KeyParamete
      * @return the unique key for the i'th value.
      */
     public String getKey(int i) {
-        if (dimNames != null) return dimNames[i];
+        if (dimNames != null) return dimNames.get(i);
         return super.getKey(i);
     }
 
-    /**
+    /** TODO return List<String>
      * @return the array of keys (a unique string for each dimension) that parallels the parameter index.
      */
     public String[] getKeys() {
-        if (dimNames != null) return Arrays.copyOf(dimNames, dimNames.length);
+        if (dimNames != null) return dimNames.toArray(String[]::new);
         return super.getKeys();
     }
 

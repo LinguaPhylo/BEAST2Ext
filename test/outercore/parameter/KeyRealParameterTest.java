@@ -16,6 +16,7 @@ import java.util.List;
 public class KeyRealParameterTest {
 
     final String spNames = "sp1 sp2 sp3 sp4 sp5 sp6 sp7 sp8 sp9 sp10";
+    final String spNames2 = "sp11 sp12 sp13 sp14 sp15 sp16 sp17 sp18 sp19 sp20";
 
     // each line is a species, each column a trait
     final List<Double> twoTraitsValues =  Arrays.asList(
@@ -43,6 +44,20 @@ public class KeyRealParameterTest {
 
         Assert.assertArrayEquals(twoTraits.getRowValues("sp1"), new Double[] { 0.326278727608277, 1.8164550628074 });
         Assert.assertArrayEquals(twoTraits.getRowValues("sp8"), new Double[] { 4.22298205455098, 1.51483058860744 });
+    }
+
+    @Test
+    public void testDimNamesOneTrait () {
+
+        KeyRealParameter oneTraits = new KeyRealParameter();
+        // pretend to be 1d array now
+        oneTraits.initByName("value", twoTraitsValues, "dimNames", spNames+" "+spNames2);
+
+        // 1d array now, so values are diff
+        Assert.assertArrayEquals(oneTraits.getRowValues("sp1"), new Double[] { 0.326278727608277 });
+        Assert.assertArrayEquals(oneTraits.getRowValues("sp8"), new Double[] { -0.187743059073837 });
+        Assert.assertArrayEquals(oneTraits.getRowValues("sp11"), new Double[] { -3.22668212260941 });
+        Assert.assertArrayEquals(oneTraits.getRowValues("sp19"), new Double[] { -0.743303344769609 });
     }
 
 //    public void testKeysTwoTraits () {
