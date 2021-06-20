@@ -47,9 +47,11 @@ public class KeyRealParameter extends RealParameter implements KeyParameter<Doub
         return super.getKey(i);
     }
 
-    /** TODO return List<String>
+    /**
+     * Use {@link #getKeysList()}
      * @return the array of keys (a unique string for each dimension) that parallels the parameter index.
      */
+    @Deprecated
     public String[] getKeys() {
         if (dimNames != null) return dimNames.toArray(new String[0]);
         return super.getKeys();
@@ -60,10 +62,10 @@ public class KeyRealParameter extends RealParameter implements KeyParameter<Doub
      *         that parallels the parameter index.
      *         It will throw UnsupportedOperationException if attempting to modify
      */
-//    public List<String> getKeysList() {
-//        if (dimNames != null) return dimNames; // unmodifiable list
-//        return super.getKeysList();
-//    }
+    public List<String> getKeysList() { // overwrite this for getRowValues(String key)
+        if (dimNames != null) return dimNames; // unmodifiable list
+        return super.getKeysList();
+    }
 
     /**
      * @param key unique key for a value
@@ -76,18 +78,18 @@ public class KeyRealParameter extends RealParameter implements KeyParameter<Doub
         return super.getValue(key);
     }
 
-    public Double[] getRowValues(String key) {
-        String[] keys = this.getKeys();
-
-        if (keys.length == getRowCount()) {
-            for (int row = 0; row < keys.length; row++) {
-                if (keys[row].equals(key)) {
-                    return getRowValues(row);
-                }
-            }
-        }
-
-        return null;
-    }
+//    public Double[] getRowValues(String key) {
+//        List<String> keys = this.getKeysList();
+//
+//        if (keys.length == getRowCount()) {
+//            for (int row = 0; row < keys.length; row++) {
+//                if (keys[row].equals(key)) {
+//                    return getRowValues(row);
+//                }
+//            }
+//        }
+//
+//        return null;
+//    }
 
 }
