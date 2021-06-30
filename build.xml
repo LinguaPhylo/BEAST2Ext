@@ -7,71 +7,71 @@
     <!--*******************************************************************-->
 
     <!-- Ant build fails if the repo dir isn't named beast-outercore -->
-    <property name="repoName" value="beast-outercore"/>
+    <property name="outercoreName" value="beast-outercore"/>
     <!-- source code dir separated from test   -->
-    <property name="src" location="../${repoName}/src" />
+    <property name="outcorSrc" location="../${outercoreName}/src" />
     <!-- source code dir of test   -->
-    <property name="lib" location="../${repoName}/lib" />
-    <property name="test" location="../${repoName}/test" />
+    <property name="outcorLib" location="../${outercoreName}/lib" />
+    <property name="outcorTest" location="../${outercoreName}/test" />
     <!-- Names of temporary build/test directories, which are deleted before build -->
-    <property name="build" location="../${repoName}/build" />
-    <property name="dist" location="../${repoName}/dist" />
-    <property name="build-test" location="../${repoName}/build-test"/>
-    <property name="test-reports" location="../${repoName}/test-reports"/>
+    <property name="outcorBuild" location="../${outercoreName}/build" />
+    <property name="outcorDist" location="../${outercoreName}/dist" />
+    <property name="outcor-build-test" location="../${outercoreName}/build-test"/>
+    <property name="outcor-test-reports" location="../${outercoreName}/test-reports"/>
 
-    <property name="projName" value="outercore"/>
+    <property name="outercoreBrief" value="outercore"/>
 
     <!--*******************************************************************-->
 
     <path id="outercore-clspath">
         <pathelement path="${classpath}"/>
-        <pathelement path="${build}"/>
-        <fileset dir="${lib}" includes="*.jar"/>
+        <pathelement path="${outcorBuild}"/>
+        <fileset dir="${outcorLib}" includes="*.jar"/>
     </path>
 
 
     <!-- Revert to pristine state. -->
     <target name="clean">
-        <delete dir="${build}"/>
-        <delete dir="${dist}"/>
-        <delete dir="${build-test}"/>
-        <delete dir="${test-reports}"/>
+        <delete dir="${outcorBuild}"/>
+        <delete dir="${outcorDist}"/>
+        <delete dir="${outcor-build-test}"/>
+        <delete dir="${outcor-test-reports}"/>
     </target>
 
     <!-- Prepare for compilation -->
     <target name="init" depends="clean">
         <echo message="Local Java version: ${java.version}, but compile for Java ${targetVersion}."/>
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <echo message="Working dir is ${repoName}." />
+        <echo message="Working dir is ${outercoreName}." />
 
-        <mkdir dir="${build}"/>
-        <mkdir dir="${dist}"/>
+        <mkdir dir="${outcorBuild}"/>
+        <mkdir dir="${outcorDist}"/>
     </target>
 
     <!-- Compile -->
     <target name="compile" depends="init">
-        <javac target="${targetVersion}" source="${sourceVersion}" srcdir="${src}"
-               destdir="${build}" classpathref="outercore-clspath" includeantruntime="false">
+        <javac target="${targetVersion}" source="${sourceVersion}" srcdir="${outcorSrc}"
+               destdir="${outcorBuild}" classpathref="outercore-clspath" includeantruntime="false">
         </javac>
-        <echo message="Successfully compiled ${projName}."/>
+        <echo message="Successfully compiled ${outercoreBrief}."/>
     </target>
 
     <!-- Prepare for unit test compilation -->
     <target name="init-test">
         <echo message="Java version: ${java.version}"/>
         <echo message="${ant.project.name}: ${ant.file}"/>
-        <echo message="Working dir is ${repoName}." />
+        <echo message="Working dir is ${outercoreName}." />
 
-        <mkdir dir="${build-test}"/>
-        <mkdir dir="${test-reports}"/>
+        <mkdir dir="${outcor-build-test}"/>
+        <mkdir dir="${outcor-test-reports}"/>
     </target>
 
     <!-- Compile unit tests -->
     <target name="compile-test" depends="init-test">
-        <javac target="${targetVersion}" source="${sourceVersion}" srcdir="${test}" destdir="${build-test}"
+        <javac target="${targetVersion}" source="${sourceVersion}" srcdir="${outcorTest}" destdir="${outcor-build-test}"
                classpathref="outercore-clspath" includeantruntime="false">
         </javac>
-        <echo message="Successfully compiled ${projName} tests."/>
+        <echo message="Successfully compiled ${outercoreBrief} tests."/>
     </target>
 
 
@@ -80,26 +80,26 @@
         <junit printsummary="yes" failureproperty="testFailed">
             <classpath>
                 <path refid="outercore-clspath"/>
-                <pathelement path="${build-test}"/>
+                <pathelement path="${outcor-build-test}"/>
             </classpath>
-            <batchtest fork="yes" todir="${test-reports}">
-                <fileset dir="${test}">
+            <batchtest fork="yes" todir="${outcor-test-reports}">
+                <fileset dir="${outcorTest}">
                     <include name="**/*Test.java"/>
                 </fileset>
                 <formatter type="plain"/>
             </batchtest>
         </junit>
 
-        <fail if="testFailed" status="1" message="Unit test of ${projName} failed."/>
+        <fail if="testFailed" status="1" message="Unit test of ${outercoreBrief} failed."/>
     </target>
 
     <target name="github-actions" depends="compile, compile-test, test">
-        <fail if="testFailed" message="One or more ${projName} tests failed."/>
+        <fail if="testFailed" message="One or more ${outercoreBrief} tests failed."/>
     </target>
 
 
     <!-- Release -->
-    <property name="pack" value="${dist}/package"/>
+    <property name="pack" value="${outcorDist}/package"/>
 
     <!-- Create BEAST 2 package, no dist task here -->
     <target name="release" depends="compile">
@@ -108,7 +108,7 @@
         <echo>depends=${addon.depends.on}, atleast=${addon.depends.atleast}</echo>
 
         <property name="projVersion" value="${addon.version}"/>
-        <property name="fullName" value="${projName}.v${projVersion}"/>
+        <property name="fullName" value="${outercoreBrief}.v${projVersion}"/>
         <echo>fullName=${fullName}</echo>
 
         <mkdir dir="${pack}"/>
@@ -117,7 +117,7 @@
         <!--mkdir dir="${pack}/lib"/-->
 <!--        <mkdir dir="${pack}/doc"/>-->
 
-        <jar jarfile="${pack}/${fullName}.src.jar" basedir="${src}" />
+        <jar jarfile="${pack}/${fullName}.src.jar" basedir="${outcorSrc}" />
 
         <!--mkdir dir="${lib}" />
         <copy todir="${pack}/lib">
@@ -125,7 +125,7 @@
         </copy-->
 
         <!--   use as BEAST 2 plugin     -->
-        <jar jarfile="${pack}/lib/${fullName}.jar" basedir="${build}" includes="**/*.class" />
+        <jar jarfile="${pack}/lib/${fullName}.jar" basedir="${outcorBuild}" includes="**/*.class" />
 <!--        <jar jarfile="${pack}/${projName}.v${projVersion}.jar" basedir="${build}">-->
 <!--            <manifest>-->
 <!--                <attribute name="Main-Class" value="beast.app.beastapp.BeastMain"/>-->
@@ -154,7 +154,7 @@
 
         <copy file="version.xml" todir="${pack}" />
 
-        <zip destfile="${dist}/${fullName}.zip" basedir="${pack}" />
+        <zip destfile="${outcorDist}/${fullName}.zip" basedir="${pack}" />
 
         <delete dir="${pack}"/>
 
