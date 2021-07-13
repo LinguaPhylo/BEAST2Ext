@@ -24,7 +24,7 @@
     <!--*******************************************************************-->
 
     <path id="outercore-clspath">
-        <pathelement path="${classpath}"/>
+<!--        <pathelement path="${classpath}"/>-->
         <pathelement path="${outcorBuild}"/>
         <fileset dir="${outcorLib}" includes="*.jar"/>
     </path>
