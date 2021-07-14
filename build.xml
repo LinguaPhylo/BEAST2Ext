@@ -99,7 +99,7 @@
 
 
     <!-- Release -->
-    <property name="pack" value="${outcorDist}/package"/>
+    <property name="pkgDir" location="${outcorDist}/package"/>
 
     <!-- Create BEAST 2 package, no dist task here -->
     <target name="release" depends="compile">
@@ -111,13 +111,13 @@
         <property name="fullName" value="${outercoreBrief}.v${projVersion}"/>
         <echo>fullName=${fullName}</echo>
 
-        <mkdir dir="${pack}"/>
+        <mkdir dir="${pkgDir}"/>
 <!--        <mkdir dir="${pack}/examples"/>-->
 <!--        <mkdir dir="${pack}/templates"/>-->
         <!--mkdir dir="${pack}/lib"/-->
 <!--        <mkdir dir="${pack}/doc"/>-->
 
-        <jar jarfile="${pack}/${fullName}.src.jar" basedir="${outcorSrc}" />
+        <jar jarfile="${pkgDir}/${fullName}.src.jar" basedir="${outcorSrc}" />
 
         <!--mkdir dir="${lib}" />
         <copy todir="${pack}/lib">
@@ -125,7 +125,7 @@
         </copy-->
 
         <!--   use as BEAST 2 plugin     -->
-        <jar jarfile="${pack}/lib/${fullName}.jar" basedir="${outcorBuild}" includes="**/*.class" />
+        <jar jarfile="${pkgDir}/lib/${fullName}.jar" basedir="${outcorBuild}" includes="**/*.class" />
 <!--        <jar jarfile="${pack}/${projName}.v${projVersion}.jar" basedir="${build}">-->
 <!--            <manifest>-->
 <!--                <attribute name="Main-Class" value="beast.app.beastapp.BeastMain"/>-->
@@ -133,8 +133,8 @@
 <!--            <zipgroupfileset dir="${lib}" includes="*.jar"/>-->
 <!--        </jar>-->
 
-        <copy file="README.md" tofile="${pack}/README" />
-        <copy file="LICENSE" tofile="${pack}/LICENSE" />
+        <copy file="README.md" tofile="${pkgDir}/README" />
+        <copy file="LICENSE" tofile="${pkgDir}/LICENSE" />
 
         <!--        <mkdir dir="${examples}" />-->
 <!--        <copy todir="${pack}/examples">-->
@@ -152,11 +152,11 @@
 <!--            <fileset dir="${doc}" includes="*.tex,*.doc,*.lyx,*.txt"/>-->
 <!--        </copy>-->
 
-        <copy file="version.xml" todir="${pack}" />
+        <copy file="version.xml" todir="${pkgDir}" />
 
-        <zip destfile="${outcorDist}/${fullName}.zip" basedir="${pack}" />
+        <zip destfile="${outcorDist}/${fullName}.zip" basedir="${pkgDir}" />
 
-        <delete dir="${pack}"/>
+        <delete dir="${pkgDir}"/>
 
         <echo/>
         <echo/>
