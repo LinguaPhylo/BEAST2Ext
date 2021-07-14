@@ -5,6 +5,7 @@ import beast.core.parameter.Parameter;
 import java.util.List;
 import java.util.TreeMap;
 
+@Deprecated
 public interface KeyParameter<T extends Number> extends Parameter<T> {
 
 

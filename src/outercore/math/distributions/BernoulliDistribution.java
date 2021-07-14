@@ -14,6 +14,7 @@ import java.util.Random;
 @Description("Bernoulli distribution, used as prior or likelihood." +
         "If the input x is a multidimensional parameter, each of the dimensions is considered as a " +
         "separate independent component.")
+@Deprecated
 public class BernoulliDistribution extends Distribution {
 
     final public Input<RealParameter> pInput = new Input<>("p", "probability p parameter. Must be either " +

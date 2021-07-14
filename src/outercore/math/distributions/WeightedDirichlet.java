@@ -14,6 +14,7 @@ import beast.core.parameter.RealParameter;
 import beast.util.Randomizer;
 
 @Description("Weighted Dirichlet distribution.")
+@Deprecated
 public class WeightedDirichlet extends ParametricDistribution {
     final public Input<RealParameter> alphaInput = new Input<>("alpha", "coefficients of the scaled Dirichlet distribution", Validate.REQUIRED);
     final public Input<IntegerParameter> weightsInput = new Input<>("weights", "weights of the scaled Dirichlet distribution", Validate.REQUIRED);

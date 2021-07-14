@@ -12,6 +12,7 @@ import java.util.List;
  * but works for column names of 2d matrix.
  * It is proposing to be deprecated after BEAST 2.6.6.
  */
+@Deprecated
 public class KeyIntegerParameter extends IntegerParameter implements KeyParameter<Integer> {
 
     public final Input<String> dimNamesInput = new Input<>("dimNames",
